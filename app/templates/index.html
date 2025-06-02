@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+{% comment %} {{block.super}} {% endcomment %}
+
+Home page
+{% endblock %}
+
+{% block content %}
+{% comment %} {{block.super}} {% endcomment %}
+{% comment %} <h1>Hello world!</h1> {% endcomment %}
+<div class="container py-5">
+    <form action="{% url 'save_data' %}" method="POST"  class="container mx-auto card p-4">
+
+                {% include 'components/ShowMessage.html' %}
+
+
+        {% csrf_token %}
+        <div class="mb-3">
+                <label for="title">Note Title</label>
+                <input name="title" type="text" class="form-control"  id="title" placeholder="Enter Note Title">
+        </div>
+        <div class="mb-3">
+                <label for="Name">Note Name</label>
+                <input name="name" type="text" class="form-control"  id="Name" placeholder="Enter your name">
+        </div>
+        <div class="mb-3">
+                <label for="desc">Note Description</label>
+                <textarea name="description" rows="5" class="form-control"  id="desc" placeholder="write something... "></textarea>
+        </div>
+        <div class="mb-3">
+                <button style="width: 100%;" class="btn btn-primary">Add Note
+                <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </form>
+</div>
+
+
+
+
+        <div class="container">
+            <h1>Notes ({{notes | length }})</h1>
+
+            <div class="row">
+            {% if notes %}
+                {% for note in notes %}
+                <div class="p-2 col-sm-2 col-md-3 col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4
+
+                            {% if note.isPublish %}                            
+                           
+                            {% else %}
+                            class = "text-decoration-line-through"
+                            {% endif%}
+
+                            >{{note.title}}</h4>
+                            <h6>{{note.name}}</h6>
+                            <p>{{note.description}}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'updateViewPage' id=note.id %}" class="btn btn-sm btn-info">Edit</a>
+                            {% comment %} <a href = "/delete-note/{{note.id}}" class="btn btn-sm btn-danger">Delete</a> {% endcomment %}
+                            <a href = "{% url 'deleteView' id=note.id %}" class="btn btn-sm btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="card mx-auto py-4">
+            <h1 class="text-center"> No Notes Found</h1>
+            {% endif %}
+            </div>
+        </div>       
+{% endblock %}
